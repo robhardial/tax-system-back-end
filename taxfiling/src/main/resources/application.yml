@@ -3,4 +3,4 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/taxes
     username: postgres
-    password: Elmont$1234
+    password:
