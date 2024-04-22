@@ -1,5 +1,6 @@
 package com.skillstorm.services;
 
+import com.skillstorm.respositories.Form1099Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,5 +8,5 @@ import org.springframework.stereotype.Service;
 public class Form1099Service {
 
     @Autowired
-    Form1099Service form1099Service;
+    Form1099Repository form1099Repository;
 }
