@@ -21,11 +21,12 @@ public class TaxReturn {
 
     private int year;
     private String filingStatus;
+
     private double totalIncome;
     private double totalFederalTaxWitheld;
     private double totalDeductions;
     private double totalCredits;
-    private double refundAmount;
+
 
     @OneToMany(mappedBy = "taxReturn", cascade = CascadeType.ALL)
     private List<FormW2> formW2s;
