@@ -1,11 +1,9 @@
 #Tell Spring where to get the data from
 spring:
-
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tax_system
+    url: jdbc:postgresql://localhost:5433/tax_system
     username: postgres
-    password: 2001.Carlos@
+    password:
 
   jpa:
     properties:
@@ -17,4 +15,3 @@ spring:
       ddl-auto: create-drop
 
     show-sql: true
-

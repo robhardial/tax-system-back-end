@@ -1,6 +1,5 @@
 package com.skillstorm.models;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -44,5 +43,9 @@ public class Person {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Form1099> form1099s;
+
+    @OneToOne
+    @JoinColumn(name = "user_id") // Define the foreign key column
+    private User user;
 
 }

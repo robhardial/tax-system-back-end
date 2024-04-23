@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Entity
-@Table(name = "tax_retun")
+@Table(name = "tax_return")
 @Data
 public class TaxReturn {
     @Id
@@ -14,7 +14,7 @@ public class TaxReturn {
     @Column(name = "tax_return_id")
     private int id;
 
-    //foreign key to Person
+    // foreign key to Person
     @ManyToOne
     @JoinColumn(name = "person_id")
     private Person person;
