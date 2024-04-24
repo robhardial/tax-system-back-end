@@ -20,13 +20,14 @@ public class TaxReturn {
     private Person person;
 
     private int year;
+
+    @Column(name = "filing_status")
     private String filingStatus;
 
-    private double totalIncome;
-    private double totalFederalTaxWitheld;
-    private double totalDeductions;
-    private double totalCredits;
-
+//    private double totalIncome;
+//    private double totalWithholding;
+//    private double totalDeductions;
+//
 
     @OneToMany(mappedBy = "taxReturn", cascade = CascadeType.ALL)
     private List<FormW2> formW2s;

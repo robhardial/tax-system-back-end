@@ -16,11 +16,26 @@ public class TaxReturnService {
     @Autowired
     TaxReturnRepository taxReturnRepository;
 
+    public TaxReturn save(TaxReturn taxReturn){
+        return taxReturnRepository.save(taxReturn);
+    }
+
+
     public TaxReturn getTaxReturnById(int id) {
         TaxReturn taxReturn = taxReturnRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Tax Return not found"));
 
         return taxReturn;
     }
+
+    public List<TaxReturn> findAll(){return taxReturnRepository.findAll();}
+
+
+    public boolean deleteById(int id){
+        taxReturnRepository.deleteById(id);
+        return !taxReturnRepository.existsById(id);
+    }
+
+
 
 }

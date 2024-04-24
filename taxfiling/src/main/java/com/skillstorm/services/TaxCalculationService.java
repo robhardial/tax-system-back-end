@@ -6,23 +6,25 @@ import com.skillstorm.models.TaxReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.Normalizer;
+
 import java.util.List;
 
 @Service
 public class TaxCalculationService {
 
-    @Autowired
-    TaxReturnService taxReturnService;
-
+    /**
+     * Calculates the tax return amount for a given TaxReturn object.
+     *
+     * @param taxReturn the TaxReturn object containing the necessary information.
+     * @return the calculated tax return amount.
+     */
     public double calculateTaxReturn(TaxReturn taxReturn){
-
 
         List<FormW2> w2Forms = taxReturn.getFormW2s();
         List<Form1099> form1099s = taxReturn.getForm1099s();
 
-
         double totalIncome = calculateTotalIncome(w2Forms,form1099s);
+
         double totalWithholdings = calculateTotalWithholdings(w2Forms);
 
         double  taxDue = calculateTaxDue(totalIncome, taxReturn.getFilingStatus());
@@ -147,7 +149,7 @@ public class TaxCalculationService {
             } else {
                 taxDue = 55049 + (income - 243725) * 0.35;
             }
-        } else if (filingStatus.equals("Married")) {
+        } else if (filingStatus.equals("Jointly")) {
             if (income <= 23200) {
                 taxDue = income * 0.1;
             } else if (income <= 94300) {
