@@ -2,6 +2,7 @@ package com.skillstorm.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CollectionId;
 
 @Entity
 @Table(name = "form_w2")
@@ -28,11 +29,17 @@ public class FormW2 {
     @JoinColumn(name = "tax_return_id")
     private TaxReturn taxReturn;
 
+    @Column
     private int year;
-    private double wages;
-    private double FederalIncomeTaxWithheld;
-    private double SocialSecurityTaxWithheld;
-    private double MedicareTaxWithheld;
 
+    @Column
+    private double wages;
+
+    @Column(name = "federal_income_tax_withheld")
+    private double FederalIncomeTaxWithheld;
+    @Column(name = "social_security_tax_withheld")
+    private double SocialSecurityTaxWithheld;
+    @Column(name = "medicare_tax_withheld")
+    private double MedicareTaxWithheld;
 
 }
