@@ -21,7 +21,6 @@ public class FormW2 {
     private int id;
 
     //foreign key to employer
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "employer_id")
     private Employer employer;

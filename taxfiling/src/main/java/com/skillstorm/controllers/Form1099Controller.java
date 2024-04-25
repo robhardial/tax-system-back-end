@@ -43,12 +43,8 @@ public class Form1099Controller {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteForm1099(@PathVariable int id) {
+    public ResponseEntity<Boolean> deleteForm1099ById(@PathVariable int id) {
         boolean deleted = form1099Service.deleteById(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            throw new ResourceNotFoundException("Form1099 not found with id: " + id);
-        }
+        return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 }
