@@ -38,11 +38,22 @@ public class EmployerService {
         Optional<Employer> existingEmployerOptional = employerRepository.findById(id);
 
         if (existingEmployerOptional.isPresent()) {
+
             Employer existingEmployer = existingEmployerOptional.get();
-            existingEmployer.setEin(employer.getEin());
-            existingEmployer.setName(employer.getName());
-            existingEmployer.setAddress(employer.getAddress());
-            existingEmployer.setFormW2s(employer.getFormW2s());
+            // Update fields only if they are not null in the request payload
+            if (employer.getEin() != null) {
+                existingEmployer.setEin(employer.getEin());
+            }
+            if (employer.getName() != null) {
+                existingEmployer.setName(employer.getName());
+            }
+            if (employer.getAddress() != null) {
+                existingEmployer.setAddress(employer.getAddress());
+            }
+            if (employer.getFormW2s() != null) {
+                existingEmployer.setFormW2s(employer.getFormW2s());
+            }
+
             return employerRepository.save(existingEmployer);
         } else {
             return employerRepository.save(employer);
