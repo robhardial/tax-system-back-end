@@ -60,11 +60,27 @@ public class PersonService {
 
         if (existingPersonOptional.isPresent()) {
             Person existingPerson = existingPersonOptional.get();
-            existingPerson.setSsn(person.getSsn());
-            existingPerson.setFirstName(person.getFirstName());
-            existingPerson.setMiddleName(person.getMiddleName());
-            existingPerson.setLastName(person.getLastName());
-            existingPerson.setAddress(person.getAddress());
+
+            if (person.getSsn() != 0) {
+                existingPerson.setSsn(person.getSsn());
+            }
+
+            if (person.getFirstName() != null) {
+                existingPerson.setFirstName(person.getFirstName());
+            }
+
+            if (person.getMiddleName() != null) {
+                existingPerson.setMiddleName(person.getMiddleName());
+            }
+
+            if (person.getLastName() != null) {
+                existingPerson.setLastName(person.getLastName());
+            }
+
+            if (person.getAddress() != null) {
+                existingPerson.setAddress(person.getAddress());
+            }
+
             return personRepository.save(existingPerson);
         } else {
             return personRepository.save(person);
