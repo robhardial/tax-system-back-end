@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/tax_system
     username: postgres
-    password: Elmont$1234
+    password:
 
   jpa:
     properties:
