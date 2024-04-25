@@ -1,5 +1,8 @@
 package com.skillstorm.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -10,6 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "persons")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Person {
 
     @Id
@@ -37,12 +43,6 @@ public class Person {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<TaxReturn> taxReturns;
-
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private List<FormW2> formW2s;
-
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private List<Form1099> form1099s;
 
     @OneToOne
     @JoinColumn(name = "user_id") // Define the foreign key column

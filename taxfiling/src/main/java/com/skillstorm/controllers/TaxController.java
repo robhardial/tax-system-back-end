@@ -19,6 +19,12 @@ public class TaxController {
     @Autowired
     private TaxReturnService taxReturnService;
 
+    /**
+     * Calculates the tax return amount for a given TaxReturn object.
+     *
+     * @param id the ID of the tax return to calculate.
+     * @return the calculated tax return amount.
+     */
     @PostMapping("/calculate/{id}")
     public double calculateTaxReturn(@PathVariable("id") int id){
         TaxReturn taxReturn = taxReturnService.getTaxReturnById(id);
