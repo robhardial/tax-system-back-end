@@ -2,7 +2,9 @@ package com.skillstorm.services;
 
 import com.skillstorm.Exceptions.ResourceNotFoundException;
 import com.skillstorm.models.Form1099;
+import com.skillstorm.models.TaxReturn;
 import com.skillstorm.respositories.Form1099Repository;
+import com.skillstorm.respositories.TaxReturnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ public class Form1099Service {
     @Autowired
     private Form1099Repository form1099Repository;
 
+    @Autowired
+    private TaxReturnRepository taxReturnRepository;
+
 
     /**
      * Saves a Form1099 object to the database.
@@ -23,6 +28,11 @@ public class Form1099Service {
      * @return the saved Form1099 object
      */
     public Form1099 save(Form1099 form1099) {
+        int taxReturnId = form1099.getTaxReturn().getId();
+        TaxReturn taxReturn = taxReturnRepository.findById(taxReturnId)
+                .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + taxReturnId));
+
+        form1099.setTaxReturn(taxReturn);
         return form1099Repository.save(form1099);
     }
 

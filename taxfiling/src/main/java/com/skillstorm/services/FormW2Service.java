@@ -2,7 +2,9 @@ package com.skillstorm.services;
 
 import com.skillstorm.Exceptions.ResourceNotFoundException;
 import com.skillstorm.models.FormW2;
+import com.skillstorm.models.TaxReturn;
 import com.skillstorm.respositories.FormW2Repository;
+import com.skillstorm.respositories.TaxReturnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class FormW2Service {
     @Autowired
     private FormW2Repository formW2Repository;
 
+    @Autowired
+    private TaxReturnRepository taxReturnRepository;
+
     /**
      * Saves a FormW2 object.
      *
@@ -24,6 +29,11 @@ public class FormW2Service {
      */
     // Create or Update (save)
     public FormW2 save(FormW2 formW2) {
+        int taxReturnId = formW2.getTaxReturn().getId();
+        TaxReturn taxReturn = taxReturnRepository.findById(taxReturnId)
+                .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + taxReturnId));
+
+        formW2.setTaxReturn(taxReturn);
         return formW2Repository.save(formW2);
     }
 
