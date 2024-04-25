@@ -3,7 +3,6 @@ package com.skillstorm.services;
 import com.skillstorm.models.Form1099;
 import com.skillstorm.models.FormW2;
 import com.skillstorm.models.TaxReturn;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -20,20 +19,28 @@ public class TaxCalculationService {
      */
     public double calculateTaxReturn(TaxReturn taxReturn){
 
+        if(taxReturn == null){
+            throw new IllegalArgumentException("TaxReturn object cannot be null");
+        }
+
+
         List<FormW2> w2Forms = taxReturn.getFormW2s();
         List<Form1099> form1099s = taxReturn.getForm1099s();
 
-        double totalIncome = calculateTotalIncome(w2Forms,form1099s);
-
+        double totalIncome = calculateTotalIncome(w2Forms, form1099s);
         double totalWithholdings = calculateTotalWithholdings(w2Forms);
 
-        double  taxDue = calculateTaxDue(totalIncome, taxReturn.getFilingStatus());
+        double socialSecurityTaxDue = calculateSocialSecurityTaxDue(totalIncome);
+        double medicareTaxDue = calculateMedicareTaxDue(totalIncome);
+        double federalTaxDue = calculateFederalTaxDue(totalIncome, taxReturn.getFilingStatus());
 
-        double taxReturnAmount = calculateReturn(totalWithholdings, taxDue);
+        double totalTaxDue = calculateTotalTaxDue(socialSecurityTaxDue, medicareTaxDue, federalTaxDue);
+
+        double taxReturnAmount = calculateReturn(totalWithholdings, totalTaxDue);
 
         return taxReturnAmount;
-
     }
+
 
     /**
      * Calculates the total income of an individual by adding all wages from both W2 forms and form 1099s.
@@ -125,48 +132,101 @@ public class TaxCalculationService {
     }
 
 
+
     /**
-     * <p>This function calculates the amount of tax due based on the income and filing status of the person.
-     *    There are different tax rates and tax brackets for each filing status.</p>
+     * Calculates the federal tax amount due based on the income and filing status.
      *
-     * @param  income        the total income of the person
-     * @param  filingStatus  the filing status of the person, "Single" or "Married"
-     * @return               the amount of tax due.
+     * @param income the total income of the person.
+     * @param filingStatus the filing status of the person, possible values are "Single" or "Jointly".
+     * @return the amount of federal tax due.
      */
-    public double calculateTaxDue(double income, String filingStatus){
+    public double calculateFederalTaxDue(double income, String filingStatus){
         double taxDue = 0.0;
+        double standardDeduction = 0.0;
+
+        if(filingStatus.equals("Single")){
+            standardDeduction = 12200;
+        } else if (filingStatus.equals("Jointly")) {
+            standardDeduction = 24400;
+        }
+
+        double taxableIncome = Math.max(0, income - standardDeduction);
+
         if (filingStatus.equals("Single")) {
-            if (income <= 11600) {
-                taxDue = income * 0.1;
-            } else if (income <= 47150) {
-                taxDue = 1160 + (income - 11600) * 0.12;
-            } else if (income <= 100525) {
-                taxDue = 5390 + (income - 47150) * 0.22;
-            } else if (income <= 191950) {
-                taxDue = 16603 + (income - 100525) * 0.24;
-            } else if (income <= 243725) {
-                taxDue = 38609 + (income - 191950) * 0.32;
+            if (taxableIncome <= 11600) {
+                taxDue = taxableIncome * 0.1;
+            } else if (taxableIncome <= 47150) {
+                taxDue = 1160 + (taxableIncome - 11600) * 0.12;
+            } else if (taxableIncome <= 100525) {
+                taxDue = 5390 + (taxableIncome - 47150) * 0.22;
+            } else if (taxableIncome <= 191950) {
+                taxDue = 16603 + (taxableIncome - 100525) * 0.24;
+            } else if (taxableIncome <= 243725) {
+                taxDue = 38609 + (taxableIncome - 191950) * 0.32;
             } else {
-                taxDue = 55049 + (income - 243725) * 0.35;
+                taxDue = 55049 + (taxableIncome - 243725) * 0.35;
             }
         } else if (filingStatus.equals("Jointly")) {
-            if (income <= 23200) {
-                taxDue = income * 0.1;
-            } else if (income <= 94300) {
-                taxDue = 2320 + (income - 23200) * 0.12;
-            } else if (income <= 201050) {
-                taxDue = 10780 + (income - 94300) * 0.22;
-            } else if (income <= 383900) {
-                taxDue = 33220 + (income - 201050) * 0.24;
-            } else if (income <= 487450) {
-                taxDue = 77218 + (income - 383900) * 0.32;
+            if (taxableIncome <= 23200) {
+                taxDue = taxableIncome * 0.1;
+            } else if (taxableIncome <= 94300) {
+                taxDue = 2320 + (taxableIncome - 23200) * 0.12;
+            } else if (taxableIncome <= 201050) {
+                taxDue = 10780 + (taxableIncome - 94300) * 0.22;
+            } else if (taxableIncome <= 383900) {
+                taxDue = 33220 + (taxableIncome - 201050) * 0.24;
+            } else if (taxableIncome <= 487450) {
+                taxDue = 77218 + (taxableIncome - 383900) * 0.32;
             } else {
-                taxDue = 110058 + (income - 487450) * 0.35;
+                taxDue = 110058 + (taxableIncome - 487450) * 0.35;
             }
         }
 
         return taxDue;
     }
+
+    /**
+     * Calculates the Social Security tax due based on the income.
+     *
+     * @param income the total income of the person.
+     * @return the amount of Social Security tax due.
+     */
+    public double calculateSocialSecurityTaxDue(double income) {
+        final double SOCIAL_SECURITY_RATE = 0.062;
+        final double SOCIAL_SECURITY_CAP = 160200;
+        return Math.min(income, SOCIAL_SECURITY_CAP) * SOCIAL_SECURITY_RATE;
+    }
+
+    /**
+     * Calculates the Medicare tax due based on the income.
+     *
+     * @param income the total income of the person.
+     * @return the amount of Medicare tax due.
+     */
+    public double calculateMedicareTaxDue(double income) {
+        final double MEDICARE_RATE = 0.0145;
+        final double ADDITIONAL_MEDICARE_RATE = 0.009;
+        final double ADDITIONAL_MEDICARE_THRESHOLD = 200000;
+        double basicMedicareTax = income * MEDICARE_RATE;
+        double additionalMedicareTax = 0.0;
+        if (income > ADDITIONAL_MEDICARE_THRESHOLD) {
+            additionalMedicareTax = (income - ADDITIONAL_MEDICARE_THRESHOLD) * ADDITIONAL_MEDICARE_RATE;
+        }
+        return basicMedicareTax + additionalMedicareTax;
+    }
+
+    /**
+     * Calculates the total tax due by adding the amounts of social security tax, medicare tax, and federal tax due.
+     *
+     * @param socialSecurityTaxDue The amount of social security tax due.
+     * @param medicareTaxDue The amount of medicare tax due.
+     * @param federalTaxDue The amount of federal tax due.
+     * @return The total tax due.
+     */
+    public double calculateTotalTaxDue(double socialSecurityTaxDue, double medicareTaxDue, double federalTaxDue) {
+        return socialSecurityTaxDue + medicareTaxDue + federalTaxDue;
+    }
+
 
     /**
      * Calculates the tax return value based on the amount of tax withheld and tax due.
