@@ -5,15 +5,33 @@ import org.springframework.stereotype.Service;
 import com.skillstorm.models.User;
 import com.skillstorm.respositories.UserRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    public User createUser(@AuthenticationPrincipal OAuth2User user) {
+        Map<String, Object> userInfo = user.getAttributes();
+        String userEmail = (String) userInfo.get("email");
+
+        User existingUser = userRepository.findByEmail(userEmail);
+
+        if (existingUser == null) {
+            User newUser = new User();
+            newUser.setEmail(userEmail);
+            return userRepository.save(newUser);
+        } else {
+            return existingUser;
+        }
+    }
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
