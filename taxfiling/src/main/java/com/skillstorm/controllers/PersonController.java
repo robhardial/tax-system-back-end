@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,21 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+
+    @PostMapping("/tokenPerson")
+    public ResponseEntity<Person> createPersonWithToken(@RequestBody Person person,
+            @AuthenticationPrincipal OAuth2User user) {
+
+        Person newPerson = personService.createPersonWithToken(person, user);
+        return new ResponseEntity<Person>(newPerson, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/tokenPerson")
+    public ResponseEntity<Person> getPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
+
+        Person retrievedPerson = personService.getPersonWithToken(user);
+        return new ResponseEntity<Person>(retrievedPerson, HttpStatus.CREATED);
+    }
 
     @GetMapping
     public ResponseEntity<List<Person>> findAllPersons() {

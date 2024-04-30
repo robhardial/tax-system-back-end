@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,29 @@ public class PersonService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
+
+    public Person createPersonWithToken(Person person, @AuthenticationPrincipal OAuth2User user) {
+
+        User retrievedUser = userService.createUser(user);
+        Person retrievedPerson = personRepository.findByUser(retrievedUser);
+
+        if (retrievedPerson != null) {
+            return retrievedPerson;
+        }
+
+        person.setUser(retrievedUser);
+        return personRepository.save(person);
+    }
+
+    public Person getPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
+
+        User retrievedUser = userService.createUser(user);
+
+        return personRepository.findByUser(retrievedUser);
+    }
 
     public List<Person> findAllPersons() {
         return personRepository.findAll();
