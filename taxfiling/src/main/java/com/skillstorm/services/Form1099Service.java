@@ -20,7 +20,6 @@ public class Form1099Service {
     @Autowired
     private TaxReturnRepository taxReturnRepository;
 
-
     /**
      * Saves a Form1099 object to the database.
      *
@@ -45,22 +44,43 @@ public class Form1099Service {
         return form1099Repository.findAll();
     }
 
-
     /**
      * Finds a Form1099 object by its ID.
      *
      * @param id the ID of the Form1099 object to be found
      * @return the found Form1099 object
-     * @throws ResourceNotFoundException if no Form1099 object is found with the specified ID
+     * @throws ResourceNotFoundException if no Form1099 object is found with the
+     *                                   specified ID
      */
     public Form1099 findById(int id) {
         return form1099Repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Form1099 not found with id: " + id));
     }
 
-
     public Form1099 update(Form1099 form1099) {
-        return form1099Repository.save(form1099);
+
+        Optional<Form1099> existingForm1099Optional = form1099Repository.findById(form1099.getId());
+
+        if (existingForm1099Optional.isPresent()) {
+
+            Form1099 existingForm1099 = existingForm1099Optional.get();
+
+            if (form1099.getTaxReturn() != null) {
+                existingForm1099.setTaxReturn(form1099.getTaxReturn());
+            }
+
+            if (form1099.getWages() != 0) {
+                existingForm1099.setWages((form1099.getWages()));
+            }
+
+            if (form1099.getYear() != 0) {
+                existingForm1099.setYear(form1099.getYear());
+            }
+
+            return form1099Repository.save(existingForm1099);
+        } else {
+            return form1099Repository.save(form1099);
+        }
     }
 
     // Delete by id
@@ -69,4 +89,4 @@ public class Form1099Service {
         return !form1099Repository.existsById(id);
     }
 
-}//End Of Service
+}// End Of Service
