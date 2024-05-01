@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 public class FormW2Service {
 
-
     @Autowired
     private FormW2Repository formW2Repository;
 
@@ -40,7 +39,6 @@ public class FormW2Service {
         Employer employer = employerRepository.findById(employerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer not found with id: " + employerId));
 
-
         TaxReturn taxReturn = taxReturnRepository.findById(taxReturnId)
                 .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + taxReturnId));
 
@@ -59,7 +57,6 @@ public class FormW2Service {
         return formW2Repository.findAll();
     }
 
-
     /**
      * Finds a FormW2 object by its ID.
      *
@@ -69,9 +66,8 @@ public class FormW2Service {
      */
     public FormW2 findById(int id) {
         return formW2Repository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("FormW2 not found with id" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("FormW2 not found with id" + id));
     }
-
 
     /**
      * Updates a FormW2 object in the database.
@@ -81,9 +77,47 @@ public class FormW2Service {
      */
 
     public FormW2 update(FormW2 formW2) {
-        return formW2Repository.save(formW2);
-    }
 
+        Optional<FormW2> existingFormW2Optional = formW2Repository.findById(formW2.getId());
+
+        if (existingFormW2Optional.isPresent()) {
+
+            FormW2 existingFormW2 = existingFormW2Optional.get();
+
+            if (formW2.getEmployer() != null) {
+                existingFormW2.setEmployer(formW2.getEmployer());
+            }
+
+            if (formW2.getTaxReturn() != null) {
+                existingFormW2.setTaxReturn(formW2.getTaxReturn());
+            }
+
+            if (formW2.getYear() != 0) {
+                existingFormW2.setYear(formW2.getYear());
+            }
+
+            if (formW2.getWages() != 0) {
+                existingFormW2.setWages(formW2.getWages());
+            }
+
+            if (formW2.getFederalIncomeTaxWithheld() != 0) {
+                existingFormW2.setFederalIncomeTaxWithheld(formW2.getFederalIncomeTaxWithheld());
+            }
+
+            if (formW2.getSocialSecurityTaxWithheld() != 0) {
+                existingFormW2.setSocialSecurityTaxWithheld(formW2.getFederalIncomeTaxWithheld());
+            }
+
+            if (formW2.getMedicareTaxWithheld() != 0) {
+                existingFormW2.setMedicareTaxWithheld(formW2.getMedicareTaxWithheld());
+            }
+
+            return formW2Repository.save(existingFormW2);
+
+        } else {
+            return formW2Repository.save(formW2);
+        }
+    }
 
     /**
      * Deletes a FormW2 object from the database based on its ID.
@@ -96,6 +130,4 @@ public class FormW2Service {
         return !formW2Repository.existsById(id);
     }
 
-
-
-}//End Of Service
+}// End Of Service
