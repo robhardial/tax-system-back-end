@@ -10,7 +10,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.skillstorm.models.Person;
 import com.skillstorm.models.User;
+import com.skillstorm.services.PersonService;
 import com.skillstorm.services.UserService;
 
 @RestController
@@ -21,9 +23,13 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    PersonService personService;
+
     @GetMapping("/signin")
     public RedirectView redirectView(@AuthenticationPrincipal OAuth2User user) {
         User newUser = userService.createUser(user);
+        Person newPerson = personService.createPersonWithToken(user);
         return new RedirectView("http://localhost:5173");
     }
 

@@ -10,6 +10,7 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class PersonService {
     @Autowired
     UserService userService;
 
-    public Person createPersonWithToken(Person person, @AuthenticationPrincipal OAuth2User user) {
+    public Person createPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
 
         User retrievedUser = userService.createUser(user);
         Person retrievedPerson = personRepository.findByUser(retrievedUser);
@@ -38,8 +39,19 @@ public class PersonService {
             return retrievedPerson;
         }
 
-        person.setUser(retrievedUser);
-        return personRepository.save(person);
+        Person newPerson = new Person();
+        Map<String, Object> userInfo = user.getAttributes();
+        System.out.println(userInfo);
+        String userFirstName = (String) userInfo.get("given_name");
+        String userLastName = (String) userInfo.get("family_name");
+        int userSsn = 00000000;
+
+        newPerson.setUser(retrievedUser);
+        newPerson.setFirstName(userFirstName);
+        newPerson.setLastName(userLastName);
+        newPerson.setSsn(userSsn);
+
+        return personRepository.save(newPerson);
     }
 
     public Person getPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
@@ -67,7 +79,8 @@ public class PersonService {
      * Finds the tax returns associated with a person based on their ID.
      *
      * @param personId the ID of the person
-     * @return a list of TaxReturn objects associated with the person, or an empty list if the person is not found
+     * @return a list of TaxReturn objects associated with the person, or an empty
+     *         list if the person is not found
      */
     public List<TaxReturn> findTaxReturnsByPersonId(int personId) {
         Optional<Person> person = personRepository.findById(personId);
@@ -76,7 +89,6 @@ public class PersonService {
         }
         return new ArrayList<>();
     }
-
 
     public Person savePerson(Person person) {
 
