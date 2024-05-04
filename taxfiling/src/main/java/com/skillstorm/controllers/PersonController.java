@@ -1,6 +1,7 @@
 package com.skillstorm.controllers;
 
 import com.skillstorm.models.Person;
+import com.skillstorm.models.TaxReturn;
 import com.skillstorm.services.PersonService;
 
 import java.util.List;
@@ -10,17 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/persons")
+@CrossOrigin("http://localhost:5173")
 public class PersonController {
 
     @Autowired
@@ -51,6 +46,17 @@ public class PersonController {
     public ResponseEntity<Person> getPersonById(@PathVariable int id) {
         Person person = personService.findPersonById(id);
         return new ResponseEntity<Person>(person, HttpStatus.OK);
+    }
+
+    //Gets all the tax returns associated with the person
+    @GetMapping("/{id}/tax-returns")
+    public ResponseEntity<List<TaxReturn>> getPersonTaxReturns(@PathVariable int id) {
+        List<TaxReturn> taxReturns = personService.findTaxReturnsByPersonId(id);
+        if (taxReturns != null && !taxReturns.isEmpty()) {
+            return new ResponseEntity<>(taxReturns, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/person")

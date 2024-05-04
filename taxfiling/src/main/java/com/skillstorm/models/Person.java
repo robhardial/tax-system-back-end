@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
 
 import java.text.Normalizer;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "persons")
 @Data
+@Getter
+
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -34,18 +37,22 @@ public class Person {
     @Column(name = "middle_name")
     private String middleName;
 
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
     @Column
     private String address;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+
+    //Use this array to access the different taxReturns of the person
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<TaxReturn> taxReturns;
 
     @OneToOne
-    @JoinColumn(name = "user_id") // Define the foreign key column
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

@@ -1,10 +1,14 @@
 package com.skillstorm.services;
 
 import com.skillstorm.models.Person;
+import com.skillstorm.models.TaxReturn;
 import com.skillstorm.models.User;
 import com.skillstorm.respositories.PersonRepository;
 import com.skillstorm.respositories.UserRepository;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,12 +57,26 @@ public class PersonService {
         Optional<Person> person = personRepository.findById(id);
 
         if (person.isPresent()) {
-
             return person.get();
         }
 
         return null;
     }
+
+    /**
+     * Finds the tax returns associated with a person based on their ID.
+     *
+     * @param personId the ID of the person
+     * @return a list of TaxReturn objects associated with the person, or an empty list if the person is not found
+     */
+    public List<TaxReturn> findTaxReturnsByPersonId(int personId) {
+        Optional<Person> person = personRepository.findById(personId);
+        if (person.isPresent()) {
+            return person.get().getTaxReturns();
+        }
+        return new ArrayList<>();
+    }
+
 
     public Person savePerson(Person person) {
 
