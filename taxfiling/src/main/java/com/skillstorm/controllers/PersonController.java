@@ -25,7 +25,7 @@ public class PersonController {
     public ResponseEntity<Person> createPersonWithToken(@RequestBody Person person,
             @AuthenticationPrincipal OAuth2User user) {
 
-        Person newPerson = personService.createPersonWithToken(person, user);
+        Person newPerson = personService.createPersonWithToken(user);
         return new ResponseEntity<Person>(newPerson, HttpStatus.CREATED);
     }
 
@@ -48,7 +48,7 @@ public class PersonController {
         return new ResponseEntity<Person>(person, HttpStatus.OK);
     }
 
-    //Gets all the tax returns associated with the person
+    // Gets all the tax returns associated with the person
     @GetMapping("/{id}/tax-returns")
     public ResponseEntity<List<TaxReturn>> getPersonTaxReturns(@PathVariable int id) {
         List<TaxReturn> taxReturns = personService.findTaxReturnsByPersonId(id);
