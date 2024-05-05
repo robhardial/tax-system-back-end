@@ -1,5 +1,6 @@
 package com.skillstorm.controllers;
 
+import com.skillstorm.DTO.FormW2Dto;
 import com.skillstorm.models.Form1099;
 import com.skillstorm.models.FormW2;
 import com.skillstorm.services.FormW2Service;
@@ -19,8 +20,8 @@ public class FormW2Controller {
     private FormW2Service formW2Service;
 
     @PostMapping
-    public ResponseEntity<FormW2> createFormW2(@RequestBody FormW2 formW2) {
-        FormW2 createdFormW2 = formW2Service.save(formW2);
+    public ResponseEntity<FormW2> createFormW2(@RequestBody FormW2Dto formW2Dto) {
+        FormW2 createdFormW2 = formW2Service.save(formW2Dto);
         return new ResponseEntity<>(createdFormW2, HttpStatus.CREATED);
     }
 
@@ -35,6 +36,13 @@ public class FormW2Controller {
         FormW2 formW2 = formW2Service.findById(id);
         return new ResponseEntity<>(formW2, HttpStatus.OK);
     }
+
+    @GetMapping("/{taxReturnId}")
+    public ResponseEntity<List<FormW2>> getFormW2sByTaxReturnId(@PathVariable int taxReturnId) {
+        List<FormW2> formW2s = formW2Service.findAllByTaxReturnId(taxReturnId);
+        return new ResponseEntity<>(formW2s, HttpStatus.OK);
+    }
+
 
     @PutMapping
     public ResponseEntity<FormW2> updateFormW2(@RequestBody FormW2 formW2) {
