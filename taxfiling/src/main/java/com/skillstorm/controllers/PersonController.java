@@ -6,6 +6,7 @@ import com.skillstorm.services.PersonService;
 
 import java.util.List;
 
+import com.skillstorm.services.TaxReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private TaxReturnService taxReturnService;
 
     @PostMapping("/tokenPerson")
     public ResponseEntity<Person> createPersonWithToken(@RequestBody Person person,
@@ -48,7 +52,12 @@ public class PersonController {
         return new ResponseEntity<Person>(person, HttpStatus.OK);
     }
 
-    // Gets all the tax returns associated with the person
+    /**
+     * Retrieves all the tax returns associated with a person based on their ID.
+     *
+     * @param id the ID of the person
+     * @return a ResponseEntity object with a list of TaxReturn objects if tax returns are found, otherwise returns a ResponseEntity object with a not found response
+     */
     @GetMapping("/{id}/tax-returns")
     public ResponseEntity<List<TaxReturn>> getPersonTaxReturns(@PathVariable int id) {
         List<TaxReturn> taxReturns = personService.findTaxReturnsByPersonId(id);
@@ -56,6 +65,23 @@ public class PersonController {
             return new ResponseEntity<>(taxReturns, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Retrieves a person by their tax return ID.
+     *
+     * @param taxReturnId the ID of the tax return
+     * @return ResponseEntity<Person> the person associated with the tax return if found, otherwise returns a not found response
+     */
+    @GetMapping("/{taxReturnId}/person")
+    public ResponseEntity<Person> getPersonByTaxReturnId(@PathVariable int taxReturnId){
+        Person person = taxReturnService.getPersonByTaxReturnId(taxReturnId);
+
+        if(person != null){
+            return ResponseEntity.ok(person);
+        }else {
+            return ResponseEntity.notFound().build();
         }
     }
 

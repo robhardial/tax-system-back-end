@@ -111,10 +111,13 @@ public class PersonService {
     }
 
     public Person editPerson(int id, Person person) {
+        System.out.println("Received person for edit: " + person);
         Optional<Person> existingPersonOptional = personRepository.findById(id);
 
         if (existingPersonOptional.isPresent()) {
             Person existingPerson = existingPersonOptional.get();
+            System.out.println("Existing person found: " + existingPerson);
+
 
             if (person.getSsn() != 0) {
                 existingPerson.setSsn(person.getSsn());
@@ -135,9 +138,13 @@ public class PersonService {
             if (person.getAddress() != null) {
                 existingPerson.setAddress(person.getAddress());
             }
+            if(person.getPhoneNumber() != null){
+                existingPerson.setPhoneNumber(person.getPhoneNumber());
+            }
 
             return personRepository.save(existingPerson);
         } else {
+            System.out.println("No existing person found with ID: " + id);
             return personRepository.save(person);
         }
     }

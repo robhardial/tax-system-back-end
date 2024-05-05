@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class TaxReturn {
     // foreign key to Person
     @ManyToOne()
     @JoinColumn(name = "person_id")
-    @JsonIgnore
+    @ToString.Exclude
     private Person person;
 
     private int year;

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.text.Normalizer;
 import java.util.List;
@@ -18,7 +19,10 @@ import java.util.List;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id",
+        scope = Person.class
+
+)
 public class Person {
 
     @Id
@@ -49,6 +53,7 @@ public class Person {
 
     //Use this array to access the different taxReturns of the person
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<TaxReturn> taxReturns;
 
     @OneToOne

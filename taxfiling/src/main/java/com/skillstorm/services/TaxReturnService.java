@@ -1,6 +1,7 @@
 package com.skillstorm.services;
 
 import com.skillstorm.DTO.TaxReturnDto;
+import com.skillstorm.models.Person;
 import com.skillstorm.models.TaxReturn;
 import com.skillstorm.respositories.TaxReturnRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,12 +31,14 @@ public class TaxReturnService {
 
     public List<TaxReturn> findAll(){return taxReturnRepository.findAll();}
 
-
     public boolean deleteById(int id){
         taxReturnRepository.deleteById(id);
         return !taxReturnRepository.existsById(id);
     }
 
-
+    public Person getPersonByTaxReturnId(int taxReturnId) {
+        TaxReturn taxReturn = getTaxReturnById(taxReturnId);
+        return taxReturn.getPerson();
+    }
 
 }
