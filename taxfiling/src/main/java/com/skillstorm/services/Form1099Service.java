@@ -27,7 +27,7 @@ public class Form1099Service {
 
         Form1099 form1099 = new Form1099();
         form1099.setTaxReturn(taxReturn);
-        form1099.setClient(form1099Dto.getClient());
+        form1099.setPayer(form1099Dto.getPayer());
         form1099.setWages(form1099Dto.getWages());
         form1099.setYear(form1099Dto.getYear());
 
@@ -85,6 +85,9 @@ public class Form1099Service {
 
             if (form1099.getYear() != 0) {
                 existingForm1099.setYear(form1099.getYear());
+            }
+            if (form1099.getPayer() != null){
+                existingForm1099.setPayer(form1099.getPayer());
             }
 
             return form1099Repository.save(existingForm1099);
