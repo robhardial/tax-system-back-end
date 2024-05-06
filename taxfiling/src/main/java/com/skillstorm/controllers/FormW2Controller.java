@@ -37,12 +37,11 @@ public class FormW2Controller {
         return new ResponseEntity<>(formW2, HttpStatus.OK);
     }
 
-    @GetMapping("/{taxReturnId}")
+    @GetMapping("/tax-return/{taxReturnId}")
     public ResponseEntity<List<FormW2>> getFormW2sByTaxReturnId(@PathVariable int taxReturnId) {
         List<FormW2> formW2s = formW2Service.findAllByTaxReturnId(taxReturnId);
         return new ResponseEntity<>(formW2s, HttpStatus.OK);
     }
-
 
     @PutMapping
     public ResponseEntity<FormW2> updateFormW2(@RequestBody FormW2 formW2) {

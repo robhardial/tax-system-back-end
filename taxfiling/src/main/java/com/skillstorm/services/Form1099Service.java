@@ -1,5 +1,6 @@
 package com.skillstorm.services;
 
+import com.skillstorm.DTO.Form1099Dto;
 import com.skillstorm.Exceptions.ResourceNotFoundException;
 import com.skillstorm.models.Form1099;
 import com.skillstorm.models.TaxReturn;
@@ -20,19 +21,18 @@ public class Form1099Service {
     @Autowired
     private TaxReturnRepository taxReturnRepository;
 
-    /**
-     * Saves a Form1099 object to the database.
-     *
-     * @param form1099 the Form1099 object to be saved
-     * @return the saved Form1099 object
-     */
-    public Form1099 save(Form1099 form1099) {
-        int taxReturnId = form1099.getTaxReturn().getId();
-        TaxReturn taxReturn = taxReturnRepository.findById(taxReturnId)
-                .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + taxReturnId));
+    public Form1099 save(Form1099Dto form1099Dto) {
+        TaxReturn taxReturn = taxReturnRepository.findById(form1099Dto.getTaxReturnId())
+                .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + form1099Dto.getTaxReturnId()));
 
+        Form1099 form1099 = new Form1099();
         form1099.setTaxReturn(taxReturn);
+        form1099.setClient(form1099Dto.getClient());
+        form1099.setWages(form1099Dto.getWages());
+        form1099.setYear(form1099Dto.getYear());
+
         return form1099Repository.save(form1099);
+
     }
 
     /**
@@ -55,6 +55,16 @@ public class Form1099Service {
     public Form1099 findById(int id) {
         return form1099Repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Form1099 not found with id: " + id));
+    }
+
+    /**
+     * Retrieves a list of Form1099 objects based on the tax return ID.
+     *
+     * @param taxReturnId the ID of the tax return
+     * @return a List of Form1099 objects found
+     */
+    public List<Form1099> findAllByTaxReturnId(int taxReturnId){
+        return form1099Repository.findAllByTaxReturnId(taxReturnId);
     }
 
     public Form1099 update(Form1099 form1099) {

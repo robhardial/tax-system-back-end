@@ -25,6 +25,9 @@ public class Form1099 {
     private TaxReturn taxReturn;
 
     @Column
+    private String client;
+
+    @Column
     private int year;
 
     @Column
