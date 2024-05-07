@@ -1,9 +1,13 @@
 #Tell Spring where to get the data from
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/tax_system
+    url: jdbc:postgresql://rhardialcrodriguez-1-instance-1.c4eqo06kg56i.us-east-1.rds.amazonaws.com:5432/tax_system
     username: postgres
     password:
+
+    #url: jdbc:postgresql://localhost:5433/tax_system
+    #username: postgres
+    #password:
 
   jpa:
     properties:
