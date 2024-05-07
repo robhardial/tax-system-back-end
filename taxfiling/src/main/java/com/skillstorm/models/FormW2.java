@@ -28,6 +28,7 @@ public class FormW2 {
     //foreign key to tax-return
     @ManyToOne
     @JoinColumn(name = "tax_return_id")
+    @JsonIgnore
     private TaxReturn taxReturn;
 
     @Column

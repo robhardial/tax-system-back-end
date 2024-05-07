@@ -12,9 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "tax_return")
 @Data
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class TaxReturn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +21,7 @@ public class TaxReturn {
     // foreign key to Person
     @ManyToOne()
     @JoinColumn(name = "person_id")
-    @ToString.Exclude
+    @JsonIgnore
     private Person person;
 
     private int year;

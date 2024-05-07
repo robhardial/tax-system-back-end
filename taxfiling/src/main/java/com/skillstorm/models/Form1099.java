@@ -1,6 +1,7 @@
 package com.skillstorm.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class Form1099 {
     //foreign key to tax-return
     @ManyToOne
     @JoinColumn(name = "tax_return_id")
+    @JsonIgnore
     private TaxReturn taxReturn;
 
     @Column
