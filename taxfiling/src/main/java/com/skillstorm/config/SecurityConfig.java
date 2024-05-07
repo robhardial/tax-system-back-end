@@ -15,39 +15,35 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                .requestMatchers("/users/logout_success").permitAll()
+                .anyRequest().authenticated())
+                .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true)
+                        .logoutUrl("/logout").logoutSuccessUrl("http://localhost:8080/users/logout_success"));
 
-        httpSecurity.authorizeHttpRequests(authorizeHttpRequests -> {
-            // all requests coming in require authentication
-            authorizeHttpRequests.anyRequest().authenticated();
+        http.csrf(csrf -> csrf.disable());
 
-        })
-                .csrf(csrf -> csrf.disable()) // disabling csrf only for demo
+        http.cors(cors -> {
+            cors.configurationSource(request -> {
+                CorsConfiguration corsConfig = new CorsConfiguration();
 
-                .cors(cors -> {
-                    cors.configurationSource(request -> {
+                corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+                corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+                corsConfig.setAllowCredentials(true);
+                corsConfig.setMaxAge(3600L);
 
-                        // configuring how we want to handle cors
-                        CorsConfiguration corsConfig = new CorsConfiguration();
-                        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-                        corsConfig.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE"));
-                        corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-                        corsConfig.setAllowCredentials(true);
-                        corsConfig.setMaxAge(3600L);
-
-                        // setting which endpoints to apply the above cors configurations to
-                        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-                        source.registerCorsConfiguration("/**", corsConfig);
-
-                        return corsConfig;
-                    });
-                });
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", corsConfig);
+                return corsConfig;
+            });
+        });
 
         // telling spring security to use our registered OAuth2 client
-        httpSecurity.oauth2Login(withDefaults());
+        http.oauth2Login(withDefaults());
 
-        return httpSecurity.build();
+        return http.build();
     }
 
 }

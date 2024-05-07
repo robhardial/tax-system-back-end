@@ -33,6 +33,12 @@ public class UserController {
         return new RedirectView("http://localhost:5173");
     }
 
+    @GetMapping("/logout_success")
+    @ResponseBody
+    public RedirectView redirectLogoutView() {
+        return new RedirectView("http://localhost:5173");
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> findAllUsers() {
         List<User> users = userService.findAllUsers();
