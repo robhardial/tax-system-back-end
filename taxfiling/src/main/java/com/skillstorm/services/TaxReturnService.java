@@ -21,7 +21,6 @@ public class TaxReturnService {
         return taxReturnRepository.save(taxReturn);
     }
 
-
     public TaxReturn getTaxReturnById(int id) {
         TaxReturn taxReturn = taxReturnRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Tax Return not found"));
@@ -30,6 +29,32 @@ public class TaxReturnService {
     }
 
     public List<TaxReturn> findAll(){return taxReturnRepository.findAll();}
+
+    public TaxReturn updateFilingStatus(TaxReturn taxReturn) {
+        Optional<TaxReturn> existingTaxReturnOptional = taxReturnRepository.findById(taxReturn.getId());
+
+        if (existingTaxReturnOptional.isPresent()) {
+            TaxReturn existingTaxReturn = existingTaxReturnOptional.get();
+
+            if(taxReturn.getFilingStatus()!=null){
+                existingTaxReturn.setFilingStatus(taxReturn.getFilingStatus());
+            }
+
+            return taxReturnRepository.save(existingTaxReturn);
+        } else {
+            throw new EntityNotFoundException("Tax Return not found");
+        }
+    }
+
+
+    public TaxReturn updateTaxReturn(TaxReturn taxReturn) {
+        TaxReturn existingTaxReturn = taxReturnRepository.findById(taxReturn.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Tax Return not found with ID: " + taxReturn.getId()));
+        existingTaxReturn.setTotalRefundDue(taxReturn.getTotalRefundDue());
+        existingTaxReturn.setCompleted(taxReturn.isCompleted());
+        return taxReturnRepository.save(existingTaxReturn);
+    }
+
 
     public boolean deleteById(int id){
         taxReturnRepository.deleteById(id);

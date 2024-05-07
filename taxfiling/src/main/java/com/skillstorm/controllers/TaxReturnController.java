@@ -65,4 +65,12 @@ public class TaxReturnController {
 
         return new ResponseEntity<>(forms, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaxReturn> updateTaxReturn(@PathVariable int id, @RequestBody TaxReturn taxReturn) {
+        TaxReturn updatedTaxReturn = taxReturnService.updateFilingStatus(taxReturn);
+        return new ResponseEntity<>(updatedTaxReturn, HttpStatus.OK);
+    }
+
+
 }
