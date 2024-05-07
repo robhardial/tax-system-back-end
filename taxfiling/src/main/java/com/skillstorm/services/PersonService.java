@@ -118,7 +118,6 @@ public class PersonService {
             Person existingPerson = existingPersonOptional.get();
             System.out.println("Existing person found: " + existingPerson);
 
-
             if (person.getSsn() != 0) {
                 existingPerson.setSsn(person.getSsn());
             }
@@ -138,8 +137,11 @@ public class PersonService {
             if (person.getAddress() != null) {
                 existingPerson.setAddress(person.getAddress());
             }
-            if(person.getPhoneNumber() != null){
+            if (person.getPhoneNumber() != null) {
                 existingPerson.setPhoneNumber(person.getPhoneNumber());
+            }
+            if (person.getDateOfBirth() != null) {
+                existingPerson.setDateOfBirth(person.getDateOfBirth());
             }
 
             return personRepository.save(existingPerson);

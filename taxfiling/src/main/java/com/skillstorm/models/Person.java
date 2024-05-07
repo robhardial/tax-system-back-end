@@ -40,11 +40,13 @@ public class Person {
     @Column
     private String address;
 
+    @Column(name = "date_of_birth")
+    private String dateOfBirth;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
-
-    //Use this array to access the different taxReturns of the person
+    // Use this array to access the different taxReturns of the person
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<TaxReturn> taxReturns;
