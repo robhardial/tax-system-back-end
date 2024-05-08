@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  tax-system-front:
+    image: tax-system-front
+    ports:
+      - "5173:5173"
+    depends_on:
+      - tax-system-back
+
+  tax-system-back:
+    image: tax-system-back
+    ports:
+      - "8080:8080"
