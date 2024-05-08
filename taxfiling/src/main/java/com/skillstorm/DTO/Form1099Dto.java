@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class Form1099Dto {
+
+    private int id;
     private int taxReturnId;
     private int year;
     private double wages;

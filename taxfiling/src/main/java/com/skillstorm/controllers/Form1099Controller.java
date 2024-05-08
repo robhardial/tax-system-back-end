@@ -45,8 +45,8 @@ public class Form1099Controller {
     }
 
     @PutMapping
-    public ResponseEntity<Form1099> updateForm1099(@RequestBody Form1099 form1099) {
-        Form1099 updatedForm1099 = form1099Service.update(form1099);
+    public ResponseEntity<Form1099> updateForm1099(@RequestBody Form1099Dto form1099Dto) {
+        Form1099 updatedForm1099 = form1099Service.update(form1099Dto);
         return new ResponseEntity<>(updatedForm1099, HttpStatus.OK);
     }
 

@@ -67,33 +67,15 @@ public class Form1099Service {
         return form1099Repository.findAllByTaxReturnId(taxReturnId);
     }
 
-    public Form1099 update(Form1099 form1099) {
+    public Form1099 update(Form1099Dto form1099Dto) {
+        Form1099 form1099 = form1099Repository.findById(form1099Dto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Form1099 not found with id: " + form1099Dto.getId()));
 
-        Optional<Form1099> existingForm1099Optional = form1099Repository.findById(form1099.getId());
+        form1099.setPayer(form1099Dto.getPayer());
+        form1099.setWages(form1099Dto.getWages());
+        form1099.setYear(form1099Dto.getYear());
 
-        if (existingForm1099Optional.isPresent()) {
-
-            Form1099 existingForm1099 = existingForm1099Optional.get();
-
-            if (form1099.getTaxReturn() != null) {
-                existingForm1099.setTaxReturn(form1099.getTaxReturn());
-            }
-
-            if (form1099.getWages() != 0) {
-                existingForm1099.setWages((form1099.getWages()));
-            }
-
-            if (form1099.getYear() != 0) {
-                existingForm1099.setYear(form1099.getYear());
-            }
-            if (form1099.getPayer() != null){
-                existingForm1099.setPayer(form1099.getPayer());
-            }
-
-            return form1099Repository.save(existingForm1099);
-        } else {
-            return form1099Repository.save(form1099);
-        }
+        return form1099Repository.save(form1099);
     }
 
     // Delete by id
