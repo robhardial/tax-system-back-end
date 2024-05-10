@@ -67,6 +67,13 @@ public class Form1099Service {
         return form1099Repository.findAllByTaxReturnId(taxReturnId);
     }
 
+    /**
+     * Updates a Form1099 object in the database based on the provided Form1099Dto.
+     *
+     * @param form1099Dto the Form1099Dto object containing the updated values
+     * @return the updated Form1099 object
+     * @throws ResourceNotFoundException if no Form1099 object is found with the specified ID
+     */
     public Form1099 update(Form1099Dto form1099Dto) {
         Form1099 form1099 = form1099Repository.findById(form1099Dto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Form1099 not found with id: " + form1099Dto.getId()));
@@ -78,6 +85,12 @@ public class Form1099Service {
         return form1099Repository.save(form1099);
     }
 
+    /**
+     * Deletes a Form1099 object from the database by its ID.
+     *
+     * @param id the ID of the Form1099 object to be deleted
+     * @return true if the Form1099 object is deleted successfully, false otherwise
+     */
     // Delete by id
     public boolean deleteById(int id) {
         form1099Repository.deleteById(id);

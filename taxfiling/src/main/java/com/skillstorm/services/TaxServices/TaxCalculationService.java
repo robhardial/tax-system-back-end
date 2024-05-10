@@ -15,12 +15,21 @@ public class TaxCalculationService {
     @Autowired
     private TaxReturnService taxReturnService;
 
+    /**
+     * A service class for calculating tax based on different tax forms.
+     */
     public TaxCalculationService(W2TaxService w2TaxService, Form1099TaxService form1099TaxService) {
         this.w2TaxService = w2TaxService;
         this.form1099TaxService = form1099TaxService;
     }
 
 
+    /**
+     * Calculates the total tax due for a given TaxReturn object.
+     *
+     * @param taxReturn the TaxReturn object for which to calculate the total tax due
+     * @return the total tax due as a double
+     */
     public double calculateTotalTaxDue(TaxReturn taxReturn) {
         double totalW2Wages = w2TaxService.sumW2Wages(taxReturn.getFormW2s());
         double total1099Wages = form1099TaxService.sum1099Wages(taxReturn.getForm1099s());
@@ -45,6 +54,13 @@ public class TaxCalculationService {
         return netTaxDue;
     }
 
+    /**
+     * Applies tax rates and deductions to calculate the total tax due based on the total wages and filing status.
+     *
+     * @param totalWages    the total wages as a double
+     * @param filingStatus  the filing status as a String ("Single" or "Jointly")
+     * @return the total tax due as a double
+     */
     private double applyTaxRatesAndDeductions(double totalWages, String filingStatus) {
         double[] incomeThresholds;
         double[] taxRates;
@@ -68,6 +84,14 @@ public class TaxCalculationService {
         return calculateMarginalTax(taxableIncome, incomeThresholds, taxRates);
     }
 
+    /**
+     * Calculates the marginal tax based on the taxable income, income thresholds, and tax rates.
+     *
+     * @param taxableIncome the taxable income as a double
+     * @param thresholds    the income thresholds as an array of double
+     * @param rates         the tax rates corresponding to the income thresholds as an array of double
+     * @return the calculated marginal tax as a double
+     */
     private double calculateMarginalTax(double taxableIncome, double[] thresholds, double[] rates) {
         double tax = 0;
         double previousThreshold = 0;

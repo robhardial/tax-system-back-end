@@ -38,6 +38,14 @@ public class TaxReturnController {
         return taxReturnService.getTaxReturnById(id);
     }
 
+    /**
+     * Creates a new tax return for a person with the specified ID.
+     *
+     * @param personId   the ID of the person
+     * @param taxReturn  the tax return object to be created
+     * @return a ResponseEntity object containing the created tax return and the HTTP status code
+     *          HttpStatus.CREATED if successful, ResponseEntity.notFound().build() if the person ID is not found
+     */
     @PostMapping("/{personId}")
     public ResponseEntity<TaxReturn> createTaxReturn(@PathVariable int personId, @RequestBody TaxReturn taxReturn){
         Person person = personService.findPersonById(personId);
@@ -50,6 +58,13 @@ public class TaxReturnController {
         return new ResponseEntity<>(createdTaxReturn, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves the tax forms associated with a tax return.
+     *
+     * @param id The ID of the tax return.
+     * @return A ResponseEntity containing a map of tax forms. The map keys are "w2s" and "form1099s" and the values are lists of FormW2 and Form1099 objects respectively.
+     *         Returns ResponseEntity.notFound().build() if no tax forms are found.
+     */
     @GetMapping("/{id}/forms")
     public ResponseEntity<Map<String, List<? extends Object>>> getTaxForms(@PathVariable int id){
         List<FormW2> w2s = formW2Service.findAllByTaxReturnId(id);
@@ -66,6 +81,13 @@ public class TaxReturnController {
         return new ResponseEntity<>(forms, HttpStatus.OK);
     }
 
+    /**
+     * Updates the filing status of a TaxReturn object in the database.
+     *
+     * @param id         The ID of the TaxReturn object to be updated.
+     * @param taxReturn  The updated TaxReturn object.
+     * @return The updated TaxReturn object wrapped in a ResponseEntity with HTTP status OK.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<TaxReturn> updateTaxReturn(@PathVariable int id, @RequestBody TaxReturn taxReturn) {
         TaxReturn updatedTaxReturn = taxReturnService.updateFilingStatus(taxReturn);
