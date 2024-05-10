@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "form_1099")
 @Data
+@NoArgsConstructor
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -35,4 +37,7 @@ public class Form1099 {
     @Column
     private double wages;
 
+    public Form1099(double wages) {
+        this.wages = wages;
+    }
 }

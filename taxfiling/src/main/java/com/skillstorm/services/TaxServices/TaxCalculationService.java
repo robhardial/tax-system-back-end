@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaxCalculationService {
 
-    @Autowired
     private W2TaxService w2TaxService;
-    @Autowired
     private Form1099TaxService form1099TaxService;
-    @Autowired
     private TaxReturnService taxReturnService;
 
     /**
      * A service class for calculating tax based on different tax forms.
      */
+    @Autowired
     public TaxCalculationService(W2TaxService w2TaxService, Form1099TaxService form1099TaxService) {
         this.w2TaxService = w2TaxService;
         this.form1099TaxService = form1099TaxService;
@@ -30,6 +28,8 @@ public class TaxCalculationService {
      * @param taxReturn the TaxReturn object for which to calculate the total tax due
      * @return the total tax due as a double
      */
+
+
     public double calculateTotalTaxDue(TaxReturn taxReturn) {
         double totalW2Wages = w2TaxService.sumW2Wages(taxReturn.getFormW2s());
         double total1099Wages = form1099TaxService.sum1099Wages(taxReturn.getForm1099s());
