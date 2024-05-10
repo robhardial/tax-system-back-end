@@ -54,25 +54,12 @@ public class PersonController {
         return new ResponseEntity<Person>(retrievedPerson, HttpStatus.CREATED);
     }
 
-    /**
-     * Retrieves all the persons from the person repository.
-     *
-     * @return a ResponseEntity with a list of Person objects representing all the
-     *         persons found and HttpStatus.OK
-     */
     @GetMapping
     public ResponseEntity<List<Person>> findAllPersons() {
         List<Person> persons = personService.findAllPersons();
         return new ResponseEntity<List<Person>>(persons, HttpStatus.OK);
     }
 
-    /**
-     * Retrieves a person from the database by their ID.
-     *
-     * @param id the ID of the person to retrieve
-     * @return a ResponseEntity containing the person with the specified ID and the
-     *         HTTP status code
-     */
     @GetMapping("/person/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable int id) {
         Person person = personService.findPersonById(id);
@@ -83,10 +70,9 @@ public class PersonController {
      * Retrieves the tax returns associated with a person based on their ID.
      *
      * @param id the ID of the person
-     * @return a ResponseEntity containing a list of TaxReturn objects associated
-     *         with the person,
-     *         or a ResponseEntity with HttpStatus.NOT_FOUND if the person is not
-     *         found
+     * @return a ResponseEntity object with a list of TaxReturn objects if tax
+     *         returns are found, otherwise returns a ResponseEntity object with a
+     *         not found response
      */
     @GetMapping("/{id}/tax-returns")
     public ResponseEntity<List<TaxReturn>> getPersonTaxReturns(@PathVariable int id) {
@@ -115,39 +101,18 @@ public class PersonController {
         }
     }
 
-    /**
-     * Creates a new person by saving the Person object in the person repository.
-     *
-     * @param person The Person object to be created.
-     * @return A ResponseEntity object containing the created Person object and the
-     *         HTTP status CREATED.
-     */
     @PostMapping("/person")
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         Person newPerson = personService.savePerson(person);
         return new ResponseEntity<Person>(newPerson, HttpStatus.CREATED);
     }
 
-    /**
-     * Edits the details of a person with the given ID.
-     *
-     * @param id     the ID of the person to edit
-     * @param person the updated Person object containing the new details
-     * @return the updated Person object
-     */
     @PutMapping("/person/{id}")
     public ResponseEntity<Person> editPerson(@PathVariable int id, @RequestBody Person person) {
         Person updatedPerson = personService.editPerson(id, person);
         return new ResponseEntity<Person>(updatedPerson, HttpStatus.OK);
     }
 
-    /**
-     * Deletes a person from the database by their ID.
-     *
-     * @param id the ID of the person to be deleted
-     * @return an empty response entity indicating a successful deletion, or an
-     *         error response entity if the person is not found
-     */
     @DeleteMapping("/person/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable int id) {
         personService.deletePersonById(id);
