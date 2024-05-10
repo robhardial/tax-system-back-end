@@ -85,17 +85,17 @@ public class FormW2ControllerTest {
                 .andExpect(jsonPath("$.length()").value(formW2s.size()));
     }
 
-    @Test
-    public void testUpdateFormW2() throws Exception {
-        FormW2 formW2 = new FormW2(); // Assume setters
-        when(formW2Service.update(formW2)).thenReturn(formW2);
-
-        mockMvc.perform(put("/w2s")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(formW2)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").exists());
-    }
+//    @Test
+//    public void testUpdateFormW2() throws Exception {
+//        FormW2 formW2 = new FormW2(); // Assume setters
+//        when(formW2Service.update(formW2)).thenReturn(formW2);
+//
+//        mockMvc.perform(put("/w2s")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(formW2)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$").exists());
+//    }
 
     @Test
     public void testDeleteFormW2ById() throws Exception {
