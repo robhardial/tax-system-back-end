@@ -3,6 +3,7 @@ package com.skillstorm.services;
 import com.skillstorm.DTO.FormW2Dto;
 import com.skillstorm.Exceptions.ResourceNotFoundException;
 import com.skillstorm.models.Employer;
+import com.skillstorm.models.Form1099;
 import com.skillstorm.models.FormW2;
 import com.skillstorm.models.TaxReturn;
 import com.skillstorm.respositories.EmployerRepository;
@@ -88,50 +89,43 @@ public class FormW2Service {
     /**
      * Updates a FormW2 object in the database.
      *
-     * @param formW2 The FormW2 object to be updated.
+     * @param formW2Dto The FormW2 object to be updated.
      * @return The updated FormW2 object.
      */
-    public FormW2 update(FormW2 formW2) {
+    public FormW2 update(FormW2Dto formW2Dto) {
 
-        Optional<FormW2> existingFormW2Optional = formW2Repository.findById(formW2.getId());
+        FormW2 formW2 = formW2Repository.findById(formW2Dto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("FormW2 not found with id: " + formW2Dto.getId()));
 
-        if (existingFormW2Optional.isPresent()) {
+        Employer employer = employerRepository.findById(formW2Dto.getEmployerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employer not found with id: " + formW2Dto.getEmployerId()));
 
-            FormW2 existingFormW2 = existingFormW2Optional.get();
+        TaxReturn taxReturn = taxReturnRepository.findById(formW2Dto.getTaxReturnId())
+                .orElseThrow(() -> new ResourceNotFoundException("TaxReturn not found with id: " + formW2Dto.getTaxReturnId()));
 
-            if (formW2.getEmployer() != null) {
-                existingFormW2.setEmployer(formW2.getEmployer());
-            }
 
-            if (formW2.getTaxReturn() != null) {
-                existingFormW2.setTaxReturn(formW2.getTaxReturn());
-            }
-
-            if (formW2.getYear() != 0) {
-                existingFormW2.setYear(formW2.getYear());
-            }
-
-            if (formW2.getWages() != 0) {
-                existingFormW2.setWages(formW2.getWages());
-            }
-
-            if (formW2.getFederalIncomeTaxWithheld() != 0) {
-                existingFormW2.setFederalIncomeTaxWithheld(formW2.getFederalIncomeTaxWithheld());
-            }
-
-            if (formW2.getSocialSecurityTaxWithheld() != 0) {
-                existingFormW2.setSocialSecurityTaxWithheld(formW2.getFederalIncomeTaxWithheld());
-            }
-
-            if (formW2.getMedicareTaxWithheld() != 0) {
-                existingFormW2.setMedicareTaxWithheld(formW2.getMedicareTaxWithheld());
-            }
-
-            return formW2Repository.save(existingFormW2);
-
-        } else {
-            return formW2Repository.save(formW2);
+        if (formW2Dto.getYear() != 0) {
+            formW2.setYear(formW2.getYear());
         }
+
+        if (formW2Dto.getWages() != 0) {
+            formW2.setWages(formW2.getWages());
+        }
+
+        if (formW2Dto.getFederalIncomeTaxWithheld() != 0) {
+            formW2.setFederalIncomeTaxWithheld(formW2.getFederalIncomeTaxWithheld());
+        }
+
+        if (formW2Dto.getSocialSecurityTaxWithheld() != 0) {
+            formW2.setSocialSecurityTaxWithheld(formW2.getFederalIncomeTaxWithheld());
+        }
+
+        if (formW2Dto.getMedicareTaxWithheld() != 0) {
+            formW2.setMedicareTaxWithheld(formW2.getMedicareTaxWithheld());
+        }
+
+        return formW2Repository.save(formW2);
+
     }
 
 

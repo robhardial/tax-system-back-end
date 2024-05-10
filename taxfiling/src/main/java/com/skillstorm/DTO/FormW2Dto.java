@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class FormW2Dto {
+    private int id;
     private int employerId;
     private int taxReturnId;
     private int year;

@@ -81,7 +81,7 @@ public class TaxReturnControllerTest {
         TaxReturn taxReturn = new TaxReturn();
         Person person = new Person();
         when(personService.findPersonById(personId)).thenReturn(person);
-        when(taxReturnService.save(taxReturn)).thenReturn(taxReturn);
+        when(taxReturnService.save(any(TaxReturn.class))).thenReturn(taxReturn);
 
         mockMvc.perform(post("/returns/{personId}", personId)
                         .contentType(MediaType.APPLICATION_JSON)

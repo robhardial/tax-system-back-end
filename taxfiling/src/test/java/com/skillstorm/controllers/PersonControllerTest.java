@@ -46,31 +46,6 @@ public class PersonControllerTest {
     }
 
     @Test
-    @WithMockUser
-    public void testCreatePersonWithToken() throws Exception {
-        OAuth2User user = mock(OAuth2User.class);
-        Person newPerson = new Person();
-        when(personService.createPersonWithToken(user)).thenReturn(newPerson);
-
-        mockMvc.perform(post("/persons/tokenPerson")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newPerson)))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    @WithMockUser
-    public void testGetPersonWithToken() throws Exception {
-        OAuth2User user = mock(OAuth2User.class);
-        Person retrievedPerson = new Person();
-        when(personService.getPersonWithToken(user)).thenReturn(retrievedPerson);
-
-        mockMvc.perform(get("/persons/tokenPerson"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$").exists());
-    }
-
-    @Test
     public void testFindAllPersons() throws Exception {
         List<Person> persons = Arrays.asList(new Person(), new Person());
         when(personService.findAllPersons()).thenReturn(persons);

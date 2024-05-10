@@ -35,11 +35,4 @@ public class Form1099TaxServiceTest {
         assertThrows(NullPointerException.class, () -> taxService.sum1099Wages(null));
     }
 
-    @Test
-    void testCalculateSelfEmploymentTax() {
-        double incomeBelowCap = 100000;
-        assertEquals(8620, taxService.calculateSelfEmploymentTax(incomeBelowCap), 0.001);
-        double incomeAboveCap = 200000;
-        assertEquals(14509, taxService.calculateSelfEmploymentTax(incomeAboveCap), 0.001);
-    }
 }

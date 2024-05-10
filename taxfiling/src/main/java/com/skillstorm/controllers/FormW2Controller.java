@@ -69,12 +69,12 @@ public class FormW2Controller {
     /**
      * Updates a FormW2 object in the database.
      *
-     * @param formW2 The FormW2 object to be updated.
+     * @param formW2Dto The FormW2 object to be updated.
      * @return The updated FormW2 object.
      */
     @PutMapping
-    public ResponseEntity<FormW2> updateFormW2(@RequestBody FormW2 formW2) {
-        FormW2 updatedFormW2 = formW2Service.update(formW2);
+    public ResponseEntity<FormW2> updateFormW2(@RequestBody FormW2Dto formW2Dto) {
+        FormW2 updatedFormW2 = formW2Service.update(formW2Dto);
         return new ResponseEntity<>(updatedFormW2, HttpStatus.OK);
     }
 
