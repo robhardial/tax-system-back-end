@@ -20,7 +20,8 @@ public class SecurityConfig {
                 .requestMatchers("/users/logout_success").permitAll()
                 .anyRequest().authenticated())
                 .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true)
-                        .logoutUrl("/logout").logoutSuccessUrl("http://localhost:8080/users/logout_success"));
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("http://team8.skillstorm-congo.com:8080/users/logout_success"));
 
         http.csrf(csrf -> csrf.disable());
 
@@ -28,7 +29,7 @@ public class SecurityConfig {
             cors.configurationSource(request -> {
                 CorsConfiguration corsConfig = new CorsConfiguration();
 
-                corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+                corsConfig.setAllowedOrigins(Arrays.asList("http://team8.skillstorm-congo.com:5173"));
                 corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                 corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
                 corsConfig.setAllowCredentials(true);

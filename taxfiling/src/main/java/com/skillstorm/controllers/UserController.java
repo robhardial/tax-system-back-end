@@ -36,7 +36,7 @@ public class UserController {
     public RedirectView redirectView(@AuthenticationPrincipal OAuth2User user) {
         User newUser = userService.createUser(user);
         Person newPerson = personService.createPersonWithToken(user);
-        return new RedirectView("http://localhost:5173");
+        return new RedirectView("http://team8.skillstorm-congo.com:5173");
     }
 
     /**
@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping("/logout_success")
     @ResponseBody
     public RedirectView redirectLogoutView() {
-        return new RedirectView("http://localhost:5173");
+        return new RedirectView("http://team8.skillstorm-congo.com:5173");
     }
 
     /**
