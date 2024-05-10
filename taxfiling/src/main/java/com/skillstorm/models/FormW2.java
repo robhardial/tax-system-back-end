@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CollectionId;
 
 @Entity
 @Table(name = "form_w2")
 @Data
+
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -44,4 +46,14 @@ public class FormW2 {
     @Column(name = "medicare_tax_withheld")
     private double MedicareTaxWithheld;
 
+    public FormW2(){
+
+    }
+
+    public FormW2(double wages, double federalIncomeTaxWithheld, double socialSecurityTaxWithheld, double medicareTaxWithheld) {
+        this.wages = wages;
+        FederalIncomeTaxWithheld = federalIncomeTaxWithheld;
+        SocialSecurityTaxWithheld = socialSecurityTaxWithheld;
+        MedicareTaxWithheld = medicareTaxWithheld;
+    }
 }
