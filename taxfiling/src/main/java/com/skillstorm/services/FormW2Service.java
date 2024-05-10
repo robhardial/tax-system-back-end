@@ -28,6 +28,13 @@ public class FormW2Service {
 
 
 
+    /**
+     * Saves a FormW2 object in the database.
+     *
+     * @param formW2Dto The FormW2Dto object containing the data to be saved.
+     * @return The saved FormW2 object.
+     * @throws ResourceNotFoundException if the Employer or TaxReturn corresponding to the provided IDs are not found.
+     */
     public FormW2 save(FormW2Dto formW2Dto) {
         Employer employer = employerRepository.findById(formW2Dto.getEmployerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Employer not found with id: " + formW2Dto.getEmployerId()));
@@ -68,6 +75,12 @@ public class FormW2Service {
                 .orElseThrow(() -> new ResourceNotFoundException("FormW2 not found with id" + id));
     }
 
+    /**
+     * Retrieves all the FormW2 objects with the specified taxReturnId from the database.
+     *
+     * @param taxReturnId The ID of the tax return to filter the FormW2 objects.
+     * @return A List of FormW2 objects with the specified taxReturnId.
+     */
     public List<FormW2> findAllByTaxReturnId(int taxReturnId){
         return formW2Repository.findAllByTaxReturnId(taxReturnId);
     }

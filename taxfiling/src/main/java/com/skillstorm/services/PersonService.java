@@ -30,6 +30,12 @@ public class PersonService {
     @Autowired
     UserService userService;
 
+    /**
+     * Creates a new person with the given authentication principal.
+     *
+     * @param user the authentication principal of the user
+     * @return the created person object
+     */
     public Person createPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
 
         User retrievedUser = userService.createUser(user);
@@ -54,6 +60,12 @@ public class PersonService {
         return personRepository.save(newPerson);
     }
 
+    /**
+     * Retrieves the Person associated with the given OAuth2User token.
+     *
+     * @param user the OAuth2User token representing the authenticated user
+     * @return the Person object associated with the user token
+     */
     public Person getPersonWithToken(@AuthenticationPrincipal OAuth2User user) {
 
         User retrievedUser = userService.createUser(user);
@@ -61,10 +73,21 @@ public class PersonService {
         return personRepository.findByUser(retrievedUser);
     }
 
+    /**
+     * Retrieves all the persons from the person repository.
+     *
+     * @return a list of Person objects representing all the persons found
+     */
     public List<Person> findAllPersons() {
         return personRepository.findAll();
     }
 
+    /**
+     * Finds a person with the specified ID.
+     *
+     * @param id the ID of the person to find
+     * @return the person with the specified ID, or null if not found
+     */
     public Person findPersonById(int id) {
         Optional<Person> person = personRepository.findById(id);
 
@@ -76,11 +99,10 @@ public class PersonService {
     }
 
     /**
-     * Finds the tax returns associated with a person based on their ID.
+     * Retrieves the tax returns associated with a person based on their ID.
      *
      * @param personId the ID of the person
-     * @return a list of TaxReturn objects associated with the person, or an empty
-     *         list if the person is not found
+     * @return a list of TaxReturn objects associated with the person, or an empty list if the person is not found
      */
     public List<TaxReturn> findTaxReturnsByPersonId(int personId) {
         Optional<Person> person = personRepository.findById(personId);
@@ -90,6 +112,12 @@ public class PersonService {
         return new ArrayList<>();
     }
 
+    /**
+     * Saves a Person object by creating or updating the associated User object.
+     *
+     * @param person The Person object to be saved.
+     * @return The saved Person object.
+     */
     public Person savePerson(Person person) {
 
         User retrievedUser = person.getUser();
@@ -110,6 +138,13 @@ public class PersonService {
         return personRepository.save(person);
     }
 
+    /**
+     * Edits the details of a person with the given ID.
+     *
+     * @param id the ID of the person to edit
+     * @param person the updated Person object containing the new details
+     * @return the updated Person object
+     */
     public Person editPerson(int id, Person person) {
         System.out.println("Received person for edit: " + person);
         Optional<Person> existingPersonOptional = personRepository.findById(id);
@@ -151,6 +186,11 @@ public class PersonService {
         }
     }
 
+    /**
+     * Deletes a person from the database by their ID.
+     *
+     * @param id the ID of the person to be deleted
+     */
     public void deletePersonById(int id) {
         personRepository.deleteByPersonId(id);
     }
