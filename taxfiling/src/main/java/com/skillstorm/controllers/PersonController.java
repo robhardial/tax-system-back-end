@@ -54,12 +54,23 @@ public class PersonController {
         return new ResponseEntity<Person>(retrievedPerson, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves all the persons from the person repository.
+     *
+     * @return a ResponseEntity object containing a list of Person objects representing all the persons found and the HTTP status code
+     */
     @GetMapping
     public ResponseEntity<List<Person>> findAllPersons() {
         List<Person> persons = personService.findAllPersons();
         return new ResponseEntity<List<Person>>(persons, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the Person object associated with the given ID.
+     *
+     * @param id the ID of the person
+     * @return a ResponseEntity containing the Person object and the HTTP status code
+     */
     @GetMapping("/person/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable int id) {
         Person person = personService.findPersonById(id);
@@ -101,18 +112,37 @@ public class PersonController {
         }
     }
 
+    /**
+     * Creates a new person by saving the provided Person object.
+     *
+     * @param person The Person object to be created.
+     * @return A ResponseEntity object containing the created person and the HTTP status code.
+     */
     @PostMapping("/person")
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         Person newPerson = personService.savePerson(person);
         return new ResponseEntity<Person>(newPerson, HttpStatus.CREATED);
     }
 
+    /**
+     * Edits the details of a person with the given ID.
+     *
+     * @param id the ID of the person to edit
+     * @param person the updated Person object containing the new details
+     * @return the updated Person object
+     */
     @PutMapping("/person/{id}")
     public ResponseEntity<Person> editPerson(@PathVariable int id, @RequestBody Person person) {
         Person updatedPerson = personService.editPerson(id, person);
         return new ResponseEntity<Person>(updatedPerson, HttpStatus.OK);
     }
 
+    /**
+     * Deletes a person from the database by their ID.
+     *
+     * @param id the ID of the person to be deleted
+     * @return a ResponseEntity object with no content and the corresponding HTTP status code
+     */
     @DeleteMapping("/person/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable int id) {
         personService.deletePersonById(id);
